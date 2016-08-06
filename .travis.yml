@@ -1,0 +1,61 @@
+sudo: required
+dist: trusty
+language: ruby
+
+before_install:
+before_install:
+- gem install asciidoctor -v 1.5.2
+- gem install tilt
+- sudo pip install git+https://github.com/gitenberg-dev/gitberg
+- sudo pip install pillow
+- sudo pip install cssutils
+- sudo pip install docutils
+- sudo pip install roman
+- sudo pip install git+https://github.com/gitenberg-dev/pg-epubmaker
+script:
+- VERSION=`ruby -e "require 'yaml'; meta = YAML.load_file('metadata.yaml'); puts meta['_version'];"`
+- git clone https://github.com/gitenberg-dev/asciidoctor-htmlbook.git
+- sudo pip install -r asciidoctor-htmlbook/gitberg-machine/requirements.txt
+
+- /usr/bin/python -c "from gitenberg import travis; travis.build_epub()"
+- ebook-convert book.epub book.mobi
+- xvfb-run ebook-convert book.epub book.pdf
+branches:
+  only:
+  - master
+notifications:
+  webhooks:
+    urls:
+      - https://unglue.it/api/travisci/webhook
+    on_success: always
+    on_failure: never
+    on_start: never
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: HDHyk04TfBuuzY/CNA6Gu8P2flQieEetTUdSu+w2VUSAFnEmCIdD1/1j/X3jMYqH8TyFlnR3UnLtyzHqxoMtrWWlAkpUOylp1CHd2cq2pHIilfn4Uhb0Jw4Cn/rc7Fy2oYYU3wGlNcWkM1QT7tVh/w9jU7C7tNnsk9A2K8aD83+gllc5BoC8JL2MqIrXX9asDGQ9glUMu7I8Yrjh5oBB9Ca71hwXgeu/NXYswLMZYnv8UGNJxNfkUx2j6cwCe4POAIFh8btTL1hqfA/RqdqIqjkE0Ycx2FzslZ6kOSIRF8nOtW//G6Z+bWEuXMYhbvBjooaq8iHP2RjHbKN03FXJUG53f2XMfSK98TffoL7lfDgzZV9jKqGfoM9dxWuWxLqg/YKhGXQ0sbBoxPwSVZhkjwOW47fg4rfyX0qQKllS2JQS79HXQqsl+WtkTLkbuqf6SuKTjT/2tlihJvAbj7s5foNQbM66Y7QWnXZsLSb/cjdB1NbBOeb9jxa51MozzteLumr3zcYndr5aB7OyuN1Vi0lIG2FGzi0ERLEc7i1RfJxH74CEVugG2sP6lG6XIXNaAaV2NiSNVDh79cYjWTjQhrW6wDVYwO4zPcNwSUfFKd6/yOPF9n/VraTT30/2nkq3rpNK0tVL5olYGCjzeKQ0LwjxQr4HQrOrvr2n512D9jo=
+  file:
+    - book.epub
+    - book.mobi
+    - book.pdf
+  "on":
+    repo: GITenberg/The-Complete-Works-of-Brann-the-Iconoclast-Volume-12_569
+addons:
+  apt:
+    packages:
+    - xsltproc
+    - xvfb
+    - calibre
+    - python-pip
+    - git
+    - python-dev
+    - libjpeg-dev
+    - libpng-dev
+    - libfreetype6
+    - libfreetype6-dev
+    - zlib1g-dev
+    - python-lxml
+    - libxml2-dev
+    - libxslt1-dev
+    - tidy
