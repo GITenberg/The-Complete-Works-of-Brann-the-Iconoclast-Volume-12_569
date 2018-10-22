@@ -1,5 +1,5 @@
 _repo: The-Complete-Works-of-Brann-the-Iconoclast-Volume-12_569
-_version: 0.2.0
+_version: 0.2.1
 covers:
 - cover_type: generated
   image_path: cover.png
@@ -27,5 +27,6 @@ subjects:
 - !lcsh 'Essays'
 - !lcsh 'Reformers'
 - !lcsh 'Brann, William Cowper, 1855-1898'
+- GITenberg
 title: The Complete Works of Brann, the Iconoclast — Volume 12
 url: http://www.gutenberg.org/ebooks/569
